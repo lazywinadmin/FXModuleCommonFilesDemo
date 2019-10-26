@@ -16,13 +16,13 @@ if(
     "`t* Key='$env:psgallerykey' `n" +
     #"`t* Key='$env:mynugetapikey' `n" +
     #"`t* Key='$nugetapikey' `n" +
-    "`t* Source='$modulePath' `n" +
+    "`t* Source='$env:modulePath' `n" +
     "`t* " |
         Write-Host
 
     Deploy -Name Module {
         By -DeploymentType PSGalleryModule {
-            FromSource -Source $modulePath
+            FromSource -Source $env:modulePath
             To -Targets PSGallery
             WithOptions -Options @{
                 ApiKey = $env:psgallerykey
