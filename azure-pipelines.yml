@@ -14,7 +14,6 @@ resources:
 # TEST
 stages:
 - stage: test
-  displayname: Lint tests
   jobs:
 
     # windows-latest (Windows PowerShell)
@@ -79,15 +78,14 @@ stages:
 
 # DEPLOY
 - stage: deploy
-  displayname: Deployment
   condition: succeeded()
   dependsOn: test
   jobs:
   - job: deploy
-    queue:
-      name: Hosted VS2017
+    pool:
+      vmImage: ubuntu-latest
     steps:
-    - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','deploy'
+    - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
       displayName: 'PowerShell Core - Build > Deploy'
       env:
         psgallerykey: $(psgallerykey)
