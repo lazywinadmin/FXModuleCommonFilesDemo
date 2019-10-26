@@ -3,6 +3,8 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+variables:
+- group: psgallery
 trigger:
 - master
 resources:
@@ -13,13 +15,9 @@ steps:
 - powershell: |
     .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test','deploy'
   displayName: 'PowerShell - Build > test > deploy'
-#  env:
-#    psgallerykey: $(psgallerykey)    
+  env:
+    psgallerykey: $(psgallerykey)    
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/TEST-*.xml'
   inputs:
     testResultsFormat: NUnit
-
-
-variables:
-- group: psgallery
