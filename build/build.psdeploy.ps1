@@ -11,12 +11,21 @@ if(
     $env:BHCommitMessage -match '!deploy'
 )
 {
+
+    "Deploying Module`n" +
+    "`t* Key='$env:psgallerykey' `n" +
+    "`t* Key='$env:mynugetapikey' `n" +
+    "`t* Key='$nugetapikey' `n" +
+    "`t* Source='$((Join-Path -path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath "BuildOutput\$env:moduleName"))' `n" +
+    "`t* " |
+        Write-Host
+
     Deploy -Name Module {
         By -DeploymentType PSGalleryModule {
             FromSource -Source (Join-Path -path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath "BuildOutput\$env:moduleName")
             To -Targets PSGallery
             WithOptions -Options @{
-                ApiKey = $env:psgallerykey
+                ApiKey = $nugetapikey
             }
         }
     }
