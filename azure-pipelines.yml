@@ -7,7 +7,7 @@ variables:
   - group: psgallery
 jobs:
 
-  - job: testing_windows-latest
+  - job: testing_windows_latest
     pool:
       vmImage: windows-latest
     steps:
@@ -35,7 +35,7 @@ jobs:
       inputs:
         testResultsFormat: NUnit
 
-  - job: testing_ubuntu-latest
+  - job: testing_ubuntu_latest
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -49,7 +49,7 @@ jobs:
         inputs:
           testResultsFormat: NUnit
 
-  - job: testing_macOS-latest
+  - job: testing_macOS_latest
     pool:
       vmImage: macOS-latest
     steps:
