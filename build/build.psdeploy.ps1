@@ -16,7 +16,7 @@ if(
     "`t* Key='$env:psgallerykey' `n" +
     #"`t* Key='$env:mynugetapikey' `n" +
     #"`t* Key='$nugetapikey' `n" +
-    "`t* Source='$env:modulePath' `n" +
+    "`t* Source='$env:modulePath'  `n" +
     "`t* " |
         Write-Host
 
