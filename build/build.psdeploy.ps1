@@ -16,13 +16,13 @@ if(
     "`t* Key='$env:psgallerykey' `n" +
     #"`t* Key='$env:mynugetapikey' `n" +
     #"`t* Key='$nugetapikey' `n" +
-    "`t* Source='$((Join-Path -path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath $modulePath))' `n" +
+    "`t* Source='$modulePath' `n" +
     "`t* " |
         Write-Host
 
     Deploy -Name Module {
         By -DeploymentType PSGalleryModule {
-            FromSource -Source (Join-Path -path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath $modulePath)
+            FromSource -Source $modulePath
             To -Targets PSGallery
             WithOptions -Options @{
                 ApiKey = $env:psgallerykey
