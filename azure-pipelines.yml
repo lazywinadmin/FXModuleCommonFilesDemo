@@ -13,8 +13,12 @@ steps:
 - powershell: |
     .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test','deploy'
   displayName: 'PowerShell - Build > test > deploy'
-  env:
-    psgallerykey: $(psgallerykey)
+#  env:
+#    psgallerykey: $(psgallerykey)
+
+variables:
+- group: psgallery
+    
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/TEST-*.xml'
   inputs:
