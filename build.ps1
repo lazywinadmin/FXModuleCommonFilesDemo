@@ -23,7 +23,7 @@ try{
     $guid = 'c7639d6c-b236-4c58-9aaf-15d77b55fcf4'
     $moduleName = "FXModuleCommonFilesDemo" # get from source control or module ?
     $author = 'Francois-Xavier Cat' # fetch from source or module
-    $description = '' # fetch from module ?
+    $description = 'Demo module' # fetch from module ?
     $companyName = 'lazywinadmin.com' # fetch from module ?
     $projectUri = "https://github.com/lazywinadmin/$moduleName" # get from module of from source control, env var
     $licenseUri = "https://github.com/lazywinadmin/$moduleName/blob/master/LICENSE.md"
