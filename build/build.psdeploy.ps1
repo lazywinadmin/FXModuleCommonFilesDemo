@@ -1,5 +1,5 @@
 <#
-    $env:PSGalleryKey is set in the Continous Integration plaform
+    $env:psgallerykey is set in the Continous Integration plaform
     $env:modulePath is set in the build.ps1
     $env:moduleName is set in the build.ps1
     $ENV:BH* are set by the BuildHelpers module
@@ -16,7 +16,7 @@ if(
             FromSource -Source (Join-Path -path (Split-Path -Path $PSScriptRoot -Parent) -ChildPath "BuildOutput\$env:moduleName")
             To -Targets PSGallery
             WithOptions -Options @{
-                ApiKey = $env:PSGalleryKey
+                ApiKey = $env:psgallerykey
             }
         }
     }
