@@ -4,21 +4,43 @@
 # https://aka.ms/yaml
 
 variables:
-- group: psgallery
-trigger:
-- master
-resources:
-- repo: self
-queue:
-  name: Hosted VS2017
-steps:
-- powershell: |
-    .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test','deploy'
-  displayName: 'PowerShell - Build > Test > Deploy'
-  env:
-    psgallerykey: $(psgallerykey)
+  - group: psgallery
+jobs:
+  - job: Test_windows2019
+    pool:
+      vmImage: windows-2019
+    steps:
+    - pwsh: .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
+      displayName: 'Windows Server 2019 - Build > Test'
+      env:
+        psgallerykey: $(psgallerykey)
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **/TEST-*.xml'
-  inputs:
-    testResultsFormat: NUnit
+  - job: Test_Ubuntu
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - pwsh: ./build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
+        displayName: 'Ubuntu - Build > Test'
+        env:
+          psgallerykey: $(psgallerykey)
+
+
+# variables:
+# - group: psgallery
+# trigger:
+# - master
+# resources:
+# - repo: self
+# queue:
+#   name: Hosted VS2017
+# steps:
+# - powershell: |
+#     .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test','deploy'
+#   displayName: 'PowerShell - Build > Test > Deploy'
+#   env:
+#     psgallerykey: $(psgallerykey)
+
+# - task: PublishTestResults@2
+#   displayName: 'Publish Test Results **/TEST-*.xml'
+#   inputs:
+#     testResultsFormat: NUnit
