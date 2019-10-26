@@ -39,7 +39,7 @@ try{
     $modulePath = "$buildoutputPath\$moduleName"
     $dependenciesPath = "$rootpath\dependencies" # folder to store modules
     $testResult = "Test-Results.xml"
-    $nugetapikey = $env:psgallerykey
+    #$nugetapikey = $env:psgallerykey
 
     $env:moduleName = $moduleName
     $env:modulePath = $modulePath
