@@ -6,23 +6,62 @@
 variables:
   - group: psgallery
 jobs:
-  - job: Test_windows2019
+
+  - job: 'Testing on Windows Server'
     pool:
-      vmImage: windows-2019
+      vmImage: windows-latest
     steps:
     - pwsh: .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
-      displayName: 'Windows Server 2019 - Build > Test'
+      displayName: 'PowerShell - Build > Test'
       env:
         psgallerykey: $(psgallerykey)
 
-  - job: Test_Ubuntu
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results **/TEST-*.xml'
+      inputs:
+        testResultsFormat: NUnit
+
+  - job: 'Testing on Windows Server Core 1803'
+    pool:
+      vmImage: win1803
+    steps:
+    - pwsh: .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
+      displayName: 'PowerShell - Build > Test'
+      env:
+        psgallerykey: $(psgallerykey)
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results **/TEST-*.xml'
+      inputs:
+        testResultsFormat: NUnit
+
+  - job: 'Testing on Ubuntu'
     pool:
       vmImage: ubuntu-latest
     steps:
       - pwsh: ./build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
-        displayName: 'Ubuntu - Build > Test'
+        displayName: 'PowerShell - Build > Test'
         env:
           psgallerykey: $(psgallerykey)
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results **/TEST-*.xml'
+        inputs:
+          testResultsFormat: NUnit
+
+  - job: 'Testing on MacOS'
+    pool:
+      vmImage: macOS-latest
+    steps:
+      - pwsh: ./build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
+        displayName: 'PowerShell - Build > Test'
+        env:
+          psgallerykey: $(psgallerykey)
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results **/TEST-*.xml'
+        inputs:
+          testResultsFormat: NUnit
 
 
 # variables:
