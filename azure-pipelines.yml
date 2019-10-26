@@ -2,84 +2,92 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
 
 variables:
   - group: psgallery
-jobs:
+trigger:
+- master
+resources:
+- repo: self
 
-  - job: testing_windows_latest
-    pool:
-      vmImage: windows-latest
-    steps:
-    - pwsh: .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
-      displayName: 'PowerShell - Build > Test'
-      env:
-        psgallerykey: $(psgallerykey)
+# TEST
+stages:
+- stage: test
+  displayname: Lint tests
+  jobs:
 
-    - task: PublishTestResults@2
-      displayName: 'Publish Test Results **/TEST-*.xml'
-      inputs:
-        testResultsFormat: NUnit
-
-  - job: testing_wincore1803
-    pool:
-      vmImage: win1803
-    steps:
-    - pwsh: .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
-      displayName: 'PowerShell - Build > Test'
-      env:
-        psgallerykey: $(psgallerykey)
-
-    - task: PublishTestResults@2
-      displayName: 'Publish Test Results **/TEST-*.xml'
-      inputs:
-        testResultsFormat: NUnit
-
-  - job: testing_ubuntu_latest
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-      - pwsh: ./build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
-        displayName: 'PowerShell - Build > Test'
-        env:
-          psgallerykey: $(psgallerykey)
-
+    # windows-latest (Windows PowerShell)
+    - job: testing_windows_latest_windowspowershell
+      pool:
+        vmImage: windows-latest
+      steps:
+      - powershell: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
+        displayName: 'Windows PowerShell - Build > Test'
       - task: PublishTestResults@2
         displayName: 'Publish Test Results **/TEST-*.xml'
         inputs:
           testResultsFormat: NUnit
 
-  - job: testing_macOS_latest
-    pool:
-      vmImage: macOS-latest
-    steps:
-      - pwsh: ./build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test'
-        displayName: 'PowerShell - Build > Test'
-        env:
-          psgallerykey: $(psgallerykey)
-
+    # windows-latest (PowerShell Core)
+    - job: testing_windows_latest
+      pool:
+        vmImage: windows-latest
+      steps:
+      - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
+        displayName: 'PowerShell Core - Build > Test'
       - task: PublishTestResults@2
         displayName: 'Publish Test Results **/TEST-*.xml'
         inputs:
           testResultsFormat: NUnit
 
+    # windows core 1803
+    - job: testing_wincore1803
+      pool:
+        vmImage: win1803
+      steps:
+      - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
+        displayName: 'PowerShell Core - Build > Test'
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results **/TEST-*.xml'
+        inputs:
+          testResultsFormat: NUnit
 
-# variables:
-# - group: psgallery
-# trigger:
-# - master
-# resources:
-# - repo: self
-# queue:
-#   name: Hosted VS2017
-# steps:
-# - powershell: |
-#     .\build.ps1 -InstallDependencies:$true -verbose -tasks 'setEnvironment','build','test','deploy'
-#   displayName: 'PowerShell - Build > Test > Deploy'
-#   env:
-#     psgallerykey: $(psgallerykey)
+    # ubuntu-latest
+    - job: testing_ubuntu_latest
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+        - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
+          displayName: 'PowerShell Core - Build > Test'
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results **/TEST-*.xml'
+          inputs:
+            testResultsFormat: NUnit
 
-# - task: PublishTestResults@2
-#   displayName: 'Publish Test Results **/TEST-*.xml'
-#   inputs:
-#     testResultsFormat: NUnit
+    # macOS-latest
+    - job: testing_macOS_latest
+      pool:
+        vmImage: macOS-latest
+      steps:
+        - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
+          displayName: 'PowerShell Core - Build > Test'
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results **/TEST-*.xml'
+          inputs:
+            testResultsFormat: NUnit
+
+# DEPLOY
+- stage: deploy
+  displayname: Deployment
+  condition: succeeded()
+  dependsOn: test
+  jobs:
+  - job: deploy
+    queue:
+      name: Hosted VS2017
+    steps:
+    - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','deploy'
+      displayName: 'PowerShell Core - Build > Deploy'
+      env:
+        psgallerykey: $(psgallerykey)
