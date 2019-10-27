@@ -11,7 +11,8 @@
         }
     }
     PSScriptAnalyzer = 'Latest'
-    BuildHelpers = 'Latest'
+    ScriptAnalyzerRulesLWA = 'Latest'
+    #BuildHelpers = 'Latest'
     PSDeploy = 'Latest'
     InvokeBuild = 'Latest'
 }
