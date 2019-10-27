@@ -30,7 +30,7 @@ stages:
       steps:
       - template: build/templates/powershell_build.yml
         parameters:
-          tasks: 'build,test'
+          tasks: 'build,test,clean'
           os: win1803
       - template: build/templates/publishtest.yml
 
@@ -41,7 +41,7 @@ stages:
       steps:
         - template: build/templates/powershell_build.yml
           parameters:
-            tasks: 'build,test'
+            tasks: 'build,test,clean'
             os: ubuntu-latest
         - template: build/templates/publishtest.yml
 
@@ -52,7 +52,7 @@ stages:
       steps:
         - template: build/templates/powershell_build.yml
           parameters:
-            tasks: 'build,test'
+            tasks: 'build,test,clean'
             os: macOS-latest
         - template: build/templates/publishtest.yml
 
