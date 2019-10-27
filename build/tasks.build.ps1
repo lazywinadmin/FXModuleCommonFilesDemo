@@ -91,7 +91,7 @@ task -Name test {
                 }
             }
         OutputFormat    = 'NUnitXml'
-        OutputFile      = "$buildOutputPath\$testResult"
+        OutputFile      = $buildOutputTestResultFilePath
         PassThru        = $true
         #Show            = 'Failed', 'Fails', 'Summary'
         #Tags            = 'Build'
