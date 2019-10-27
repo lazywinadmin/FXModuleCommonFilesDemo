@@ -1,8 +1,6 @@
 # https://aka.ms/yaml
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
 
-variables:
-  - group: psgallery
 trigger:
 - master
 resources:
@@ -12,22 +10,15 @@ resources:
 stages:
 - stage: test
   jobs:
-    # windows-latest (Windows PowerShell)
+    # windows-latest
     - job: testing_windows_latest_windowspowershell
       pool:
         vmImage: windows-latest
       steps:
-      - powershell: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
-        displayName: 'Windows PowerShell - Build > Test'
-      - template: build/templates/publishtest.yml
-
-    # windows-latest (PowerShell Core)
-    - job: testing_windows_latest
-      pool:
-        vmImage: windows-latest
-      steps:
-      - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
-        displayName: 'PowerShell Core - Build > Test'
+      - template: build/templates/powershell_build.yml
+        parameters:
+          tasks: 'build,test'
+          os: windows-latest
       - template: build/templates/publishtest.yml
 
     # windows core 1803
@@ -35,8 +26,10 @@ stages:
       pool:
         vmImage: win1803
       steps:
-      - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
-        displayName: 'PowerShell Core - Build > Test'
+      - template: build/templates/powershell_build.yml
+        parameters:
+          tasks: 'build,test'
+          os: win1803
       - template: build/templates/publishtest.yml
 
     # ubuntu-latest
@@ -44,8 +37,10 @@ stages:
       pool:
         vmImage: ubuntu-latest
       steps:
-        - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
-          displayName: 'PowerShell Core - Build > Test'
+        - template: build/templates/powershell_build.yml
+          parameters:
+            tasks: 'build,test'
+            os: ubuntu-latest
         - template: build/templates/publishtest.yml
 
     # macOS-latest
@@ -53,8 +48,10 @@ stages:
       pool:
         vmImage: macOS-latest
       steps:
-        - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
-          displayName: 'PowerShell Core - Build > Test'
+        - template: build/templates/powershell_build.yml
+          parameters:
+            tasks: 'build,test'
+            os: macOS-latest
         - template: build/templates/publishtest.yml
 
 # DEPLOY
@@ -66,7 +63,6 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','deploy'
-      displayName: 'PowerShell Core - Build > Deploy'
-      env:
-        psgallerykey: $(psgallerykey)
+    - template: build/templates/powershell_build.yml
+      parameters:
+        tasks: 'build,deploy'

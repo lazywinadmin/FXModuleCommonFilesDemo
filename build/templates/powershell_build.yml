@@ -1,0 +1,32 @@
+parameters:
+  tasks: 'build,test'  # defaults for any parameters that aren't specified
+  os: ''
+
+variables:
+  - group: psgallery
+
+steps:
+# windows
+- ${{ if contains(parameters.os, 'win') }}:
+  - powershell: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment',${{ parameters.tasks }}
+    displayName: 'Windows PowerShell - tasks:${{ parameters.tasks }}'
+    env:
+      psgallerykey: $(psgallerykey)
+  - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment',${{ parameters.tasks }}
+    displayName: 'PowerShell Core - tasks:${{ parameters.tasks }}'
+    env:
+      psgallerykey: $(psgallerykey)
+
+# linux
+- ${{ if contains(parameters.os, 'ubuntu') }}:
+  - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment',${{ parameters.tasks }}
+    displayName: 'PowerShell Core - tasks:${{ parameters.tasks }}'
+    env:
+      psgallerykey: $(psgallerykey)
+
+# mac
+- ${{ if contains(parameters.os, 'mac') }}:
+  - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment',${{ parameters.tasks }}
+    displayName: 'PowerShell Core - tasks:${{ parameters.tasks }}'
+    env:
+      psgallerykey: $(psgallerykey)
