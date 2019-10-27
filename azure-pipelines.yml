@@ -19,7 +19,7 @@ stages:
       steps:
       - template: build/templates/powershell_build.yml
         parameters:
-          tasks: 'build,test'
+          tasks: 'build,test,clean'
           os: windows-latest
       - template: build/templates/publishtest.yml
 
