@@ -1,6 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema
 
@@ -22,10 +19,7 @@ stages:
       steps:
       - powershell: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
         displayName: 'Windows PowerShell - Build > Test'
-      - task: PublishTestResults@2
-        displayName: 'Publish Test Results **/TEST-*.xml'
-        inputs:
-          testResultsFormat: NUnit
+      - template: build/templates/publishtest.yml
 
     # windows-latest (PowerShell Core)
     - job: testing_windows_latest
@@ -34,10 +28,7 @@ stages:
       steps:
       - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
         displayName: 'PowerShell Core - Build > Test'
-      - task: PublishTestResults@2
-        displayName: 'Publish Test Results **/TEST-*.xml'
-        inputs:
-          testResultsFormat: NUnit
+      - template: build/templates/publishtest.yml
 
     # windows core 1803
     - job: testing_wincore1803
@@ -46,10 +37,7 @@ stages:
       steps:
       - pwsh: .\build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
         displayName: 'PowerShell Core - Build > Test'
-      - task: PublishTestResults@2
-        displayName: 'Publish Test Results **/TEST-*.xml'
-        inputs:
-          testResultsFormat: NUnit
+      - template: build/templates/publishtest.yml
 
     # ubuntu-latest
     - job: testing_ubuntu_latest
@@ -58,10 +46,7 @@ stages:
       steps:
         - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
           displayName: 'PowerShell Core - Build > Test'
-        - task: PublishTestResults@2
-          displayName: 'Publish Test Results **/TEST-*.xml'
-          inputs:
-            testResultsFormat: NUnit
+        - template: build/templates/publishtest.yml
 
     # macOS-latest
     - job: testing_macOS_latest
@@ -70,10 +55,7 @@ stages:
       steps:
         - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
           displayName: 'PowerShell Core - Build > Test'
-        - task: PublishTestResults@2
-          displayName: 'Publish Test Results **/TEST-*.xml'
-          inputs:
-            testResultsFormat: NUnit
+        - template: build/templates/publishtest.yml
 
 # DEPLOY
 - stage: deploy
