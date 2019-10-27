@@ -15,7 +15,6 @@ resources:
 stages:
 - stage: test
   jobs:
-
     # windows-latest (Windows PowerShell)
     - job: testing_windows_latest_windowspowershell
       pool:
@@ -85,7 +84,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','test'
+    - pwsh: ./build.ps1 -InstallDependencies:$true -tasks 'setEnvironment','build','deploy'
       displayName: 'PowerShell Core - Build > Deploy'
       env:
         psgallerykey: $(psgallerykey)
