@@ -6,7 +6,7 @@ task -Name nothing {
 task -Name setEnvironment {
     # Run test build
     # Read the current environment, populate env vars
-    Set-BuildEnvironment -Path $rootpath
+    Set-BuildEnvironment -Path $rootpath -ErrorAction Continue
 
     # Read back the env vars
     Get-Item ENV:* |
