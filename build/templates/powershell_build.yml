@@ -2,9 +2,6 @@ parameters:
   tasks: 'build,test'  # defaults for any parameters that aren't specified
   os: ''
 
-variables:
-  - group: psgallery
-
 steps:
 # windows
 - ${{ if contains(parameters.os, 'win') }}:

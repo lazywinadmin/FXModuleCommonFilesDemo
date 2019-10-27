@@ -5,6 +5,8 @@ trigger:
 - master
 resources:
 - repo: self
+variables:
+  - group: psgallery
 
 # TEST
 stages:
