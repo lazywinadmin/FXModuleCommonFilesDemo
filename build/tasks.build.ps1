@@ -3,10 +3,10 @@ task -Name nothing {
     "foo"
 }
 
-task -Name setEnvironment {
+task -Name env {
     # Run test build
     # Read the current environment, populate env vars
-    Set-BuildEnvironment -Path $rootpath -ErrorAction Continue
+    #Set-BuildEnvironment -Path $rootpath -ErrorAction Continue
 
     # Read back the env vars
     Get-Item ENV:* |
